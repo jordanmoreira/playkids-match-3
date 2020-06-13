@@ -9,6 +9,13 @@ public class Gem : MonoBehaviour
 
     bool isMoving = false;
 
+    Board board;
+
+    public void Init(Board b)
+    {
+        board = b;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,8 +63,10 @@ public class Gem : MonoBehaviour
             if (Vector3.Distance(transform.position, destination) < 0.01f)
             {
                 reachedDestination = true;
-                transform.position = destination;
-                SetCoord((int)destination.x, (int)destination.y);
+                if (board != null)
+                {
+                    board.PlaceGem(this, (int)destination.x, (int)destination.y);
+                }
                 break;
             }
             // track the total running time
