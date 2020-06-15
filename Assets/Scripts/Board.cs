@@ -1,4 +1,7 @@
-﻿using Unity.Mathematics;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Board : MonoBehaviour
@@ -53,10 +56,10 @@ public class Board : MonoBehaviour
     {
         gem.transform.position = new Vector3(x, y, 0);
         gem.transform.rotation = Quaternion.identity;
-        // if (IsWithinBounds(x, y))
-        //{
-        allGems[x, y] = gem;
-        //}
+        if (IsWithinBounds(x, y))
+        {
+            allGems[x, y] = gem;
+        }
         gem.SetCoord(x, y);
     }
 
@@ -112,10 +115,38 @@ public class Board : MonoBehaviour
 
     void SwitchTiles(Tile clickedTile, Tile targetTile)
     {
+        StartCoroutine(SwitchTilesRoutine(clickedTile, targetTile));
+    }
+
+    IEnumerator SwitchTilesRoutine(Tile clickedTile, Tile targetTile)
+    {
         Gem clickedGem = allGems[clickedTile.xIndex, clickedTile.yIndex];
         Gem targetGem = allGems[targetTile.xIndex, targetTile.yIndex];
-        clickedGem.Move(targetTile.xIndex, targetTile.yIndex, 0.3f);
-        targetGem.Move(clickedTile.xIndex, clickedTile.yIndex, 0.3f);
+
+        if (clickedGem != null && targetGem != null)
+        {
+            clickedGem.Move(targetTile.xIndex, targetTile.yIndex, 0.3f);
+            targetGem.Move(clickedTile.xIndex, clickedTile.yIndex, 0.3f);
+
+            yield return new WaitForSeconds(0.3f);
+
+            List<Gem> clickedGemsMatches = FindMatchesAt(clickedTile.xIndex, clickedTile.yIndex);
+            List<Gem> targetGemsMatches = FindMatchesAt(targetTile.xIndex, targetTile.yIndex);
+
+            if (clickedGemsMatches.Count == 0 && targetGemsMatches.Count == 0)
+            {
+                clickedGem.Move(clickedTile.xIndex, clickedTile.yIndex, 0.3f);
+                targetGem.Move(targetTile.xIndex, targetTile.yIndex, 0.3f);
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.3f);
+
+                ClearGemAt(clickedGemsMatches);
+                ClearGemAt(targetGemsMatches);
+            }
+        }
+
     }
 
     bool IsNextTo(Tile clickedTile, Tile targetTile)
@@ -131,5 +162,149 @@ public class Board : MonoBehaviour
         }
 
         return false;
+    }
+
+    List<Gem> FindMatches(int startX, int startY, Vector2 searchDirection, int minLength = 3)
+    {
+        List<Gem> matches = new List<Gem>();
+        Gem startGem = null;
+
+        if (IsWithinBounds(startX, startY))
+        {
+            startGem = allGems[startX, startY];
+        }
+        if (startGem != null)
+        {
+            matches.Add(startGem);
+        }
+        else
+        {
+            return null;
+        }
+
+        int nextX;
+        int nextY;
+
+        int maxValue = (width > height) ? width : height;
+
+        for (int i = 1; i < maxValue - 1; i++)
+        {
+            nextX = startX + (int)Mathf.Clamp(searchDirection.x, -1, 1) * i;
+            nextY = startY + (int)Mathf.Clamp(searchDirection.y, -1, 1) * i;
+
+            if (!IsWithinBounds(nextX, nextY))
+            {
+                break;
+            }
+
+            Gem nextGem = allGems[nextX, nextY];
+
+            if (nextGem == null)
+            {
+                break;
+            }
+            else
+            {
+                if (nextGem.matchValue == startGem.matchValue && !matches.Contains(nextGem))
+                {
+                    matches.Add(nextGem);
+                    //Debug.Log("match value deu igual");
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        if (matches.Count >= minLength)
+        {
+            return matches;
+        }
+        return null;
+    }
+
+    List<Gem> FindMatchesAt(int x, int y, int minLength = 3)
+    {
+        List<Gem> horizontalMatches = FindHorizontalMatches(x, y, minLength);
+        List<Gem> verticalMatches = FindVerticalMatches(x, y, minLength);
+
+        if (horizontalMatches == null)
+        {
+            horizontalMatches = new List<Gem>();
+        }
+        if (verticalMatches == null)
+        {
+            verticalMatches = new List<Gem>();
+        }
+
+        var combinedMatches = horizontalMatches.Union(verticalMatches).ToList();
+        return combinedMatches;
+    }
+
+    List<Gem> FindHorizontalMatches(int startX, int startY, int minLength = 3)
+    {
+        List<Gem> rightSideMatches = FindMatches(startX, startY, new Vector2(1, 0), 2);
+        List<Gem> leftSideMatches = FindMatches(startX, startY, new Vector2(-1, 0), 2);
+
+        if (rightSideMatches == null)
+        {
+            rightSideMatches = new List<Gem>();
+        }
+        if (leftSideMatches == null)
+        {
+            leftSideMatches = new List<Gem>();
+        }
+
+        var combinedMatches = rightSideMatches.Union(leftSideMatches).ToList();
+        return (combinedMatches.Count >= minLength) ? combinedMatches : null;
+    }
+
+    List<Gem> FindVerticalMatches(int startX, int startY, int minLength = 3)
+    {
+        List<Gem> upwardMatches = FindMatches(startX, startY, new Vector2(0, 1), 2);
+        List<Gem> downwardMatches = FindMatches(startX, startY, new Vector2(0, -1), 2);
+
+        if (upwardMatches == null)
+        {
+            upwardMatches = new List<Gem>();
+        }
+        if (downwardMatches == null)
+        {
+            downwardMatches = new List<Gem>();
+        }
+
+        var combinedMatches = upwardMatches.Union(downwardMatches).ToList();
+        return (combinedMatches.Count >= minLength) ? combinedMatches : null;
+    }
+
+    void ClearGemAt(int x, int y)
+    {
+        Gem gemToClear = allGems[x, y];
+
+        if (gemToClear != null)
+        {
+            allGems[x, y] = null;
+            Destroy(gemToClear.gameObject);
+        }
+    }
+
+    void ClearGemAt(List<Gem> gems)
+    {
+        foreach (Gem gem in gems)
+        {
+            ClearGemAt(gem.xIndex, gem.yIndex);
+        }
+    }
+
+    void ClearBoard()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                ClearGemAt(i, j);
+            }
+        }
     }
 }

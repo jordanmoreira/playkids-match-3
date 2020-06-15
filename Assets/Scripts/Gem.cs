@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Gem : MonoBehaviour
 {
@@ -8,6 +8,18 @@ public class Gem : MonoBehaviour
     public int yIndex;
 
     bool isMoving = false;
+
+    public enum MatchValue
+    {
+        Apple,
+        Bread,
+        Broccoli,
+        Coconut,
+        Milk,
+        Orange,
+        Star
+    }
+    public MatchValue matchValue;
 
     Board board;
 
@@ -25,14 +37,14 @@ public class Gem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            Move((int)transform.position.x + 1, (int)transform.position.y, 0.5f);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            Move((int)transform.position.x - 1, (int)transform.position.y, 0.5f);
-        }
+        //if (Input.GetKeyDown(KeyCode.RightArrow))
+        //{
+        //    Move((int)transform.position.x + 1, (int)transform.position.y, 0.5f);
+        //}
+        //if (Input.GetKeyDown(KeyCode.LeftArrow))
+        //{
+        //    Move((int)transform.position.x - 1, (int)transform.position.y, 0.5f);
+        //}
     }
 
     public void SetCoord(int x, int y)
