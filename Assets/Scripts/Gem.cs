@@ -23,6 +23,8 @@ public class Gem : MonoBehaviour
 
     Board board;
 
+    public int scoreValue = 10;
+
     public void Init(Board b)
     {
         board = b;
@@ -37,14 +39,6 @@ public class Gem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.RightArrow))
-        //{
-        //    Move((int)transform.position.x + 1, (int)transform.position.y, 0.5f);
-        //}
-        //if (Input.GetKeyDown(KeyCode.LeftArrow))
-        //{
-        //    Move((int)transform.position.x - 1, (int)transform.position.y, 0.5f);
-        //}
     }
 
     public void SetCoord(int x, int y)
@@ -94,5 +88,13 @@ public class Gem : MonoBehaviour
             yield return null;
         }
         isMoving = false;
+    }
+
+    public void ScorePoints()
+    {
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddScore(scoreValue);
+        }
     }
 }

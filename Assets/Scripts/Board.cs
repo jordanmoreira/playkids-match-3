@@ -345,6 +345,7 @@ public class Board : MonoBehaviour
             if (gem != null)
             {
                 ClearGemAt(gem.xIndex, gem.yIndex);
+                gem.ScorePoints();
             }
         }
     }
