@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
     public Text levelNameText;
+    public Text scoreGoalText;
     public Text movesLeftText;
     public Text timeLeftText;
     public Image timerBarImage;
@@ -16,13 +17,7 @@ public class UIManager : Singleton<UIManager>
     // Start is called before the first frame update
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        UpdateScoregoal();
     }
 
     public void UpdateMoves()
@@ -34,15 +29,17 @@ public class UIManager : Singleton<UIManager>
     }
     public void UpdateTimer()
     {
-        UIManager.Instance.timeLeftText.text = GameManager.Instance.currentTime.ToString();
-        UIManager.Instance.timerBarImage.fillAmount = GameManager.Instance.currentTime / GameManager.Instance.maxTime;
+        timeLeftText.text = GameManager.Instance.currentTime.ToString();
+        timerBarImage.fillAmount = GameManager.Instance.currentTime / GameManager.Instance.maxTime;
     }
-
+    public void UpdateScoregoal()
+    {
+        scoreGoalText.text = "Score goal: " + GameManager.Instance.scoreGoal;
+    }
     public void ActivateMessagePanel()
     {
         transform.GetChild(2).gameObject.SetActive(true);
     }
-
     public void ShowMessage(string msgPanelText, string msgButtonText)
     {
         messagePanelText.text = msgPanelText;

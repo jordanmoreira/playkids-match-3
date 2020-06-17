@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     bool isRdyToBegin = false;
     bool isGameOver = false;
     bool isWinner = false;
+    bool runTimer = true;
 
     Board board;
 
@@ -32,7 +33,6 @@ public class GameManager : Singleton<GameManager>
 
         StartCoroutine(ExecuteGameLoop());
     }
-
 
     public void LoadLevel()
     {
@@ -62,11 +62,12 @@ public class GameManager : Singleton<GameManager>
 
     public void StartCountdown()
     {
+
         StartCoroutine(CountDownRoutine());
     }
     IEnumerator CountDownRoutine()
     {
-        while (currentTime > 0)
+        while (currentTime > 0 && runTimer)
         {
             yield return new WaitForSeconds(1f);
             currentTime--;
@@ -99,18 +100,20 @@ public class GameManager : Singleton<GameManager>
                 {
                     UIManager.Instance.ShowMessage("Congratulations,\n you can now go to \n the next level!", "Go");
                     UIManager.Instance.ActivateMessagePanel();
+                    runTimer = false;
                 }
                 if (ScoreManager.Instance.CurrentScore >= scoreGoal && SceneManager.GetActiveScene().name == "Level3")
                 {
                     UIManager.Instance.ShowMessage("YOU WON!!", "Restart Game");
                     UIManager.Instance.ActivateMessagePanel();
-                    maxTime = 1000;
+                    runTimer = false;
                     isWinner = true;
                 }
             }
             if (movesLeft == 0 || currentTime <= 0)
             {
                 isGameOver = true;
+                runTimer = false;
             }
 
             yield return null;

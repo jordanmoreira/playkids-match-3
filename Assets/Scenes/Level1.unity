@@ -165,8 +165,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movesLeft: 20
-  scoreGoal: 100
-  maxTime: 10
+  scoreGoal: 400
+  maxTime: 20
   currentTime: 0
 --- !u!1 &519420028
 GameObject:
@@ -469,6 +469,45 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 940651175, guid: 32160941815d91246ae5ee8a8f77fd76, type: 3}
+      propertyPath: scoreGoalText
+      value: 
+      objectReference: {fileID: 1835448015}
+    - target: {fileID: 2007933111784093748, guid: 32160941815d91246ae5ee8a8f77fd76,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 16357635}
+    - target: {fileID: 2007933111784093748, guid: 32160941815d91246ae5ee8a8f77fd76,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6979779575688865501, guid: 32160941815d91246ae5ee8a8f77fd76,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Score Goal: ---'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6979779576134701474, guid: 32160941815d91246ae5ee8a8f77fd76,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000039101
+      objectReference: {fileID: 0}
+    - target: {fileID: 6979779576134701474, guid: 32160941815d91246ae5ee8a8f77fd76,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 159
+      objectReference: {fileID: 0}
+    - target: {fileID: 6979779576253900519, guid: 32160941815d91246ae5ee8a8f77fd76,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6979779576284969178, guid: 32160941815d91246ae5ee8a8f77fd76,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6979779576948927196, guid: 32160941815d91246ae5ee8a8f77fd76,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -725,6 +764,18 @@ MonoBehaviour:
   clear: {fileID: 8300000, guid: 2951ede1ac5e3a64b9ec09bab074a370, type: 3}
   select: {fileID: 8300000, guid: e7404b24e50b1e14fbbfb6f4adea2a14, type: 3}
   swap: {fileID: 8300000, guid: be328218b98ddea498e9059a1349d2f5, type: 3}
+--- !u!114 &1835448015 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6979779575688865501, guid: 32160941815d91246ae5ee8a8f77fd76,
+    type: 3}
+  m_PrefabInstance: {fileID: 1513349687}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1920646507
 GameObject:
   m_ObjectHideFlags: 0
