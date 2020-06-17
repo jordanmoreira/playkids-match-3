@@ -8,17 +8,14 @@ public class GameManager : Singleton<GameManager>
 {
     public int movesLeft;
     public int scoreGoal;
-    public Text levelNameText;
-    public Text movesLeftText;
-
-    public Text messagePanelText;
-    public Text messageButtonText;
-
-    Board board;
+    public float maxTime;
+    public float currentTime;
 
     bool isRdyToBegin = false;
     bool isGameOver = false;
     bool isWinner = false;
+
+    Board board;
 
     // Start is called before the first frame update
     void Start()
@@ -26,23 +23,17 @@ public class GameManager : Singleton<GameManager>
         board = GameObject.FindObjectOfType<Board>().GetComponent<Board>();
         Scene currentScene = SceneManager.GetActiveScene();
 
-        if (levelNameText != null)
+        if (UIManager.Instance.levelNameText != null)
         {
-            levelNameText.text = currentScene.name;
+            UIManager.Instance.levelNameText.text = currentScene.name;
         }
+        currentTime = maxTime;
+        UIManager.Instance.UpdateMoves();
 
-        UpdateMoves();
-
-        StartCoroutine("ExecuteGameLoop");
+        StartCoroutine(ExecuteGameLoop());
     }
 
-    public void UpdateMoves()
-    {
-        if (movesLeftText != null)
-        {
-            movesLeftText.text = movesLeft.ToString();
-        }
-    }
+
     public void LoadLevel()
     {
         Scene currentScene = SceneManager.GetActiveScene();
@@ -68,20 +59,24 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
-    public void ActivateMessagePanel()
+
+    public void StartCountdown()
     {
-        transform.GetChild(2).gameObject.SetActive(true);
+        StartCoroutine(CountDownRoutine());
     }
-    public void ShowMessage(string msgPanelText, string msgButtonText)
+    IEnumerator CountDownRoutine()
     {
-        messagePanelText.text = msgPanelText;
-        messageButtonText.text = msgButtonText;
+        while (currentTime > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            currentTime--;
+        }
     }
     IEnumerator ExecuteGameLoop()
     {
-        yield return StartCoroutine("StartGameRoutine");
-        yield return StartCoroutine("PlayGameRoutine");
-        yield return StartCoroutine("EndGameRoutine");
+        yield return StartCoroutine(StartGameRoutine());
+        yield return StartCoroutine(PlayGameRoutine());
+        yield return StartCoroutine(EndGameRoutine());
     }
     IEnumerator StartGameRoutine()
     {
@@ -94,23 +89,26 @@ public class GameManager : Singleton<GameManager>
     }
     IEnumerator PlayGameRoutine()
     {
+        StartCountdown();
         while (!isGameOver)
         {
+            UIManager.Instance.UpdateTimer();
             if (ScoreManager.Instance != null)
             {
                 if (ScoreManager.Instance.CurrentScore >= scoreGoal && SceneManager.GetActiveScene().name != "Level3")
                 {
-                    ShowMessage("Congratulations,\n you can now go to \n the next level!", "Go");
-                    ActivateMessagePanel();
+                    UIManager.Instance.ShowMessage("Congratulations,\n you can now go to \n the next level!", "Go");
+                    UIManager.Instance.ActivateMessagePanel();
                 }
                 if (ScoreManager.Instance.CurrentScore >= scoreGoal && SceneManager.GetActiveScene().name == "Level3")
                 {
-                    ShowMessage("YOU WON!!", "Restart Game");
-                    ActivateMessagePanel();
+                    UIManager.Instance.ShowMessage("YOU WON!!", "Restart Game");
+                    UIManager.Instance.ActivateMessagePanel();
+                    maxTime = 1000;
                     isWinner = true;
                 }
             }
-            if (movesLeft == 0)
+            if (movesLeft == 0 || currentTime <= 0)
             {
                 isGameOver = true;
             }
@@ -123,8 +121,8 @@ public class GameManager : Singleton<GameManager>
         if (isGameOver == true)
         {
             Debug.Log("GAME OVER");
-            ShowMessage("You lose!", "Restart");
-            ActivateMessagePanel();
+            UIManager.Instance.ShowMessage("YOU LOST!", "Restart");
+            UIManager.Instance.ActivateMessagePanel();
         }
 
         yield return null;

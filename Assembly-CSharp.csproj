@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
+    <Compile Include="Assets\Scripts\UIManager.cs" />
     <None Include="Assets\Audio\Music\Attribution.txt" />
     <Reference Include="UnityEngine">
       <HintPath>F:/Unity/Editors/2019.4.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

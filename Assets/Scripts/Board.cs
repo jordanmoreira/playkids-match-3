@@ -192,7 +192,7 @@ public class Board : MonoBehaviour
                     if (GameManager.Instance != null)
                     {
                         GameManager.Instance.movesLeft--;
-                        GameManager.Instance.UpdateMoves();
+                        UIManager.Instance.UpdateMoves();
                     }
                     yield return new WaitForSeconds(0.3f);
 
