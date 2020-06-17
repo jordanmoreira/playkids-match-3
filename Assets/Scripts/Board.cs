@@ -126,7 +126,10 @@ public class Board : MonoBehaviour
         if (_clickedTile == null)
         {
             _clickedTile = tile;
-            Debug.Log("clicked tile: " + tile.name);
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySelect();
+            }
         }
     }
 
@@ -165,6 +168,10 @@ public class Board : MonoBehaviour
             {
                 clickedGem.Move(targetTile.xIndex, targetTile.yIndex, 0.3f);
                 targetGem.Move(clickedTile.xIndex, clickedTile.yIndex, 0.3f);
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlaySwap();
+                }
 
                 yield return new WaitForSeconds(0.3f);
 
@@ -175,9 +182,18 @@ public class Board : MonoBehaviour
                 {
                     clickedGem.Move(clickedTile.xIndex, clickedTile.yIndex, 0.3f);
                     targetGem.Move(targetTile.xIndex, targetTile.yIndex, 0.3f);
+                    if (AudioManager.Instance != null)
+                    {
+                        AudioManager.Instance.PlaySwap();
+                    }
                 }
                 else
                 {
+                    if (GameManager.Instance != null)
+                    {
+                        GameManager.Instance.movesLeft--;
+                        GameManager.Instance.UpdateMoves();
+                    }
                     yield return new WaitForSeconds(0.3f);
 
                     ClearAndRefillBoard(clickedGemsMatches.Union(targetGemsMatches).ToList());
@@ -347,6 +363,10 @@ public class Board : MonoBehaviour
                 ClearGemAt(gem.xIndex, gem.yIndex);
                 gem.ScorePoints();
             }
+        }
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayClear();
         }
     }
 

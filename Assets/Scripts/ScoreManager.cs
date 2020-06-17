@@ -6,6 +6,13 @@ using UnityEngine.UI;
 public class ScoreManager : Singleton<ScoreManager>
 {
     int currentScore = 0;
+    public int CurrentScore
+    {
+        get
+        {
+            return currentScore;
+        }
+    }
     int counterValue = 0;
     int increment = 5;
 

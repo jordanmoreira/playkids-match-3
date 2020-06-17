@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Panel
   - 
   - 
   - 
@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Panel
+    uniqueID: 651648333
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

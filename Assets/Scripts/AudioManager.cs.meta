@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7b29b773484c0e64cb956995a88d643b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - music: {fileID: 8300000, guid: 20ed7869fb3ba6244b58d63f0bcc3c63, type: 3}
+  - clear: {fileID: 8300000, guid: 2951ede1ac5e3a64b9ec09bab074a370, type: 3}
+  - select: {fileID: 8300000, guid: e7404b24e50b1e14fbbfb6f4adea2a14, type: 3}
+  - swap: {fileID: 8300000, guid: be328218b98ddea498e9059a1349d2f5, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
