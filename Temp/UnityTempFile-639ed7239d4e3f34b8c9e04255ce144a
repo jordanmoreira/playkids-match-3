@@ -307,6 +307,7 @@
 /define:CSHARP_7_3_OR_NEWER
 Assets\Scripts\AudioManager.cs
 Assets\Scripts\Board.cs
+Assets\Scripts\BoardDeadlock.cs
 Assets\Scripts\GameManager.cs
 Assets\Scripts\Gem.cs
 Assets\Scripts\ScoreManager.cs

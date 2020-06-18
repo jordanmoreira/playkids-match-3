@@ -23,7 +23,6 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         UpdateScoreText(currentScore);
     }
-
     public void UpdateScoreText(int scoreValue)
     {
         if (scoreText != null)
@@ -31,13 +30,11 @@ public class ScoreManager : Singleton<ScoreManager>
             scoreText.text = scoreValue.ToString();
         }
     }
-
     public void AddScore(int value)
     {
         currentScore += value;
         StartCoroutine(CountScoreRoutine());
     }
-
     IEnumerator CountScoreRoutine()
     {
         int iterations = 0;
@@ -52,5 +49,4 @@ public class ScoreManager : Singleton<ScoreManager>
         counterValue = currentScore;
         UpdateScoreText(currentScore);
     }
-
 }

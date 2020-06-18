@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Schema;
 using Unity.Mathematics;
 using UnityEngine;
 
+//[RequireComponent(typeof(BoardDeadlock))]
 public class Board : MonoBehaviour
 {
     public int width;
@@ -32,7 +32,6 @@ public class Board : MonoBehaviour
         SetupTiles();
         FillBoardWithRandom();
     }
-
     void SetupTiles()
     {
         for (int i = 0; i < width; i++)
@@ -48,13 +47,11 @@ public class Board : MonoBehaviour
             }
         }
     }
-
     GameObject GetRandomGem()
     {
         int randomIdX = UnityEngine.Random.Range(0, gemPrefabs.Length);
         return gemPrefabs[randomIdX];
     }
-
     public void PlaceGem(Gem gem, int x, int y)
     {
         gem.transform.position = new Vector3(x, y, 0);
@@ -65,12 +62,10 @@ public class Board : MonoBehaviour
         }
         gem.SetCoord(x, y);
     }
-
     bool IsWithinBounds(int x, int y)
     {
         return (x >= 0 && x < width && y >= 0 && y < height);
     }
-
     Gem RandomFill(int x, int y)
     {
         GameObject randomGem = Instantiate(GetRandomGem(), Vector3.zero, Quaternion.identity) as GameObject;
@@ -83,7 +78,6 @@ public class Board : MonoBehaviour
         }
         return null;
     }
-
     void FillBoardWithRandom()
     {
         for (int i = 0; i < width; i++)
@@ -103,7 +97,6 @@ public class Board : MonoBehaviour
             }
         }
     }
-
     bool HasMatchOnFill(int x, int y, int minLength = 3)
     {
         List<Gem> leftSideMatches = FindMatches(x, y, new Vector2(-1, 0), minLength);
@@ -120,7 +113,6 @@ public class Board : MonoBehaviour
 
         return (leftSideMatches.Count > 0 || downwardMatches.Count > 0);
     }
-
     public void ClickTile(Tile tile)
     {
         if (_clickedTile == null)
@@ -132,7 +124,6 @@ public class Board : MonoBehaviour
             }
         }
     }
-
     public void DragTile(Tile tile)
     {
         if (_clickedTile != null && IsNextTo(tile, _clickedTile))
@@ -140,7 +131,6 @@ public class Board : MonoBehaviour
             _targetTile = tile;
         }
     }
-
     public void ReleaseTile()
     {
         if (_clickedTile != null && _targetTile != null)
@@ -151,12 +141,10 @@ public class Board : MonoBehaviour
         _clickedTile = null;
         _targetTile = null;
     }
-
     void SwitchTiles(Tile clickedTile, Tile targetTile)
     {
         StartCoroutine(SwitchTilesRoutine(clickedTile, targetTile));
     }
-
     IEnumerator SwitchTilesRoutine(Tile clickedTile, Tile targetTile)
     {
         if (playerInputEnabled)
@@ -201,7 +189,6 @@ public class Board : MonoBehaviour
             }
         }
     }
-
     bool IsNextTo(Tile clickedTile, Tile targetTile)
     {
         if (math.abs(clickedTile.xIndex - targetTile.xIndex) == 1 && clickedTile.yIndex == targetTile.yIndex)
@@ -216,7 +203,6 @@ public class Board : MonoBehaviour
 
         return false;
     }
-
     List<Gem> FindMatches(int startX, int startY, Vector2 searchDirection, int minLength = 3)
     {
         List<Gem> matches = new List<Gem>();
@@ -276,7 +262,6 @@ public class Board : MonoBehaviour
         }
         return null;
     }
-
     List<Gem> FindMatchesAt(int x, int y, int minLength = 3)
     {
         List<Gem> horizontalMatches = FindHorizontalMatches(x, y, minLength);
@@ -294,7 +279,6 @@ public class Board : MonoBehaviour
         var combinedMatches = horizontalMatches.Union(verticalMatches).ToList();
         return combinedMatches;
     }
-
     List<Gem> FindMatchesAt(List<Gem> gems, int minLength = 3)
     {
         List<Gem> matches = new List<Gem>();
@@ -306,7 +290,6 @@ public class Board : MonoBehaviour
 
         return matches;
     }
-
     List<Gem> FindHorizontalMatches(int startX, int startY, int minLength = 3)
     {
         List<Gem> rightSideMatches = FindMatches(startX, startY, new Vector2(1, 0), 2);
@@ -324,7 +307,6 @@ public class Board : MonoBehaviour
         var combinedMatches = rightSideMatches.Union(leftSideMatches).ToList();
         return (combinedMatches.Count >= minLength) ? combinedMatches : null;
     }
-
     List<Gem> FindVerticalMatches(int startX, int startY, int minLength = 3)
     {
         List<Gem> upwardMatches = FindMatches(startX, startY, new Vector2(0, 1), 2);
@@ -342,7 +324,6 @@ public class Board : MonoBehaviour
         var combinedMatches = upwardMatches.Union(downwardMatches).ToList();
         return (combinedMatches.Count >= minLength) ? combinedMatches : null;
     }
-
     void ClearGemAt(int x, int y)
     {
         Gem gemToClear = allGems[x, y];
@@ -353,7 +334,6 @@ public class Board : MonoBehaviour
             Destroy(gemToClear.gameObject);
         }
     }
-
     void ClearGemAt(List<Gem> gems)
     {
         foreach (Gem gem in gems)
@@ -369,7 +349,6 @@ public class Board : MonoBehaviour
             AudioManager.Instance.PlayClear();
         }
     }
-
     void ClearBoard()
     {
         for (int i = 0; i < width; i++)
@@ -380,7 +359,6 @@ public class Board : MonoBehaviour
             }
         }
     }
-
     List<Gem> CollapseColumn(int column, float collapseTime = 0.1f)
     {
         List<Gem> movingGems = new List<Gem>();
@@ -410,7 +388,6 @@ public class Board : MonoBehaviour
         }
         return movingGems;
     }
-
     List<Gem> CollapseColumn(List<Gem> gems)
     {
         List<Gem> movingGems = new List<Gem>();
@@ -423,7 +400,6 @@ public class Board : MonoBehaviour
 
         return movingGems;
     }
-
     List<int> GetColumns(List<Gem> gems)
     {
         List<int> columns = new List<int>();
@@ -437,31 +413,34 @@ public class Board : MonoBehaviour
         }
         return columns;
     }
-
     void ClearAndRefillBoard(List<Gem> gems)
     {
         StartCoroutine(ClearAndRefillBoardRoutine(gems));
     }
-
     IEnumerator ClearAndRefillBoardRoutine(List<Gem> gems)
     {
         playerInputEnabled = false;
 
-        // clear and collapse
         yield return StartCoroutine(ClearAndCollapseRoutine(gems));
         yield return null;
 
-        // refill
         yield return StartCoroutine(RefillRoutine());
+
+        if (BoardDeadlock.Instance.IsDeadlocked(allGems, 3))
+        {
+            yield return new WaitForSeconds(3f);
+            ClearBoard();
+            yield return new WaitForSeconds(1f);
+            yield return StartCoroutine(RefillRoutine());
+        }
+
         playerInputEnabled = true;
     }
-
     IEnumerator RefillRoutine()
     {
         FillBoardWithRandom();
         yield return null;
     }
-
     IEnumerator ClearAndCollapseRoutine(List<Gem> gems)
     {
         List<Gem> movingGems = new List<Gem>();

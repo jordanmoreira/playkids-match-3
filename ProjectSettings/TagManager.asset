@@ -14,8 +14,8 @@ TagManager:
   - 
   - 
   - Panel
-  - 
-  - 
+  - Background
+  - Board
   - 
   - 
   - 
@@ -41,6 +41,12 @@ TagManager:
   - name: Panel
     uniqueID: 651648333
     locked: 0
+  - name: UI
+    uniqueID: 3335930683
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3840325259
     locked: 0

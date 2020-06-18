@@ -17,7 +17,8 @@ public class Gem : MonoBehaviour
         Coconut,
         Milk,
         Orange,
-        Star
+        Star,
+        None
     }
     public MatchValue matchValue;
 
@@ -29,24 +30,11 @@ public class Gem : MonoBehaviour
     {
         board = b;
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     public void SetCoord(int x, int y)
     {
         xIndex = x;
         yIndex = y;
     }
-
     public void Move(int targetX, int targetY, float time)
     {
         if (!isMoving)
@@ -54,7 +42,6 @@ public class Gem : MonoBehaviour
             StartCoroutine(MoveRoutine(new Vector3(targetX, targetY, 0), time));
         }
     }
-
     IEnumerator MoveRoutine(Vector3 destination, float time)
     {
         Vector3 startPosition = transform.position;
@@ -89,7 +76,6 @@ public class Gem : MonoBehaviour
         }
         isMoving = false;
     }
-
     public void ScorePoints()
     {
         if (ScoreManager.Instance != null)
